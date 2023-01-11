@@ -1,0 +1,18 @@
+body {
+    background-color: white;
+    color: rgb(120, 11, 11);
+}
+a {
+    text-decoration: none;
+    color: brown;
+    border: 2px solid grey;
+    padding: 2px;
+}
+
+table,
+tr,
+td,
+th {
+  border: 1px solid black;
+  border-collapse: collapse;
+}

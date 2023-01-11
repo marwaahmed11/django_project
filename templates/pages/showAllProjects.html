@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block content %}
+<!-- 
+<style>
+    table,
+    tr,
+    td,
+    th {
+    border: 1px solid green;
+    }
+</style> -->
+<!-- {% load static %} -->
+<!-- <img src="{% static 'images/images.jpeg' %}" alt="" /> -->
+<h1 style="color : rgb(255, 0, 191)">All Projects</h1> 
+<table>
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Current Money</th>
+      <th>Category</th>
+      <th>Start Date</th>
+      <th>End Date</th>
+      <th>image</th>
+      <th>Actions</th>
+    </tr>
+    {% for ele in projects %}
+    <tr>
+      <td>{{ele.id}}</td>
+      <td>{{ele.name}}</td>
+      <td>{{ele.current_situation}}</td>
+      <td>{{ele.category}}</td>
+      <td>{{ele.created_at}}</td>
+      <td>{{ele.end_date}}</td>
+      <td>
+       
+        {% if ele.image %} <img src="{{ele.image.url}}" alt="image" width="200px"/> {% endif %}
+
+      </td>
+      <td style="padding: 10px">
+        <a href="{% url 'showProject' ele.id %}" class="btn btn-info"> Show </a>
+        <a href="{% url 'deleteProject' ele.id %}" class="btn btn-danger"> Delete </a>
+        <a href="{% url 'updateProject' ele.id %}" class="btn btn-danger"> Update </a>
+      </td>
+    </tr>
+    {% endfor %} 
+  </table>
+<br>
+  <a href ="{% url 'createProject' %}">Create Project</a>
+  <!-- <h1>{{car}}</h1> # bta3t get--> 
+
+  <a href="{% url 'Logout'  %}" class="btn btn-info"> Logout</a>
+
+
+
+{% endblock %}

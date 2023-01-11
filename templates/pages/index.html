@@ -1,0 +1,37 @@
+{% extends 'base.html' %} <!--  3shan a5li kol pages tinherit nav and footer  w lazm ykon awl str-->
+
+<!-- <h1 style="color : red">hello from pages/index.html</h1>  ay line b3d extend msh bytshaf 3'eer f block -->
+
+{% block content %}
+<h1 style="color : red">hello from pages/index.html</h1> 
+{% for ele in users %}
+<h1>{{ele.user}}</h1>
+<a href ="{% url 'pagesabouthtml' %}">About</a>
+{% endfor %}
+{% endblock %}
+
+<!-- filters -->
+<!--
+<h1>{{user|capfirst|add:" ahmed"}}</h1>
+<h1>{{age|default:"age not found"}}</h1>  
+<h1>{{name|cut:"@"}}</h1>
+<h1>{{name|length}}</h1>
+<h1>{{salary|filesizeformat}}</h1> 
+-->
+
+<!-- if condition -->
+<!-- {% if user == "marwa" %}
+<h1 style="color:aqua">{{user}}</h1>
+{% else %}
+<h1 style="color:blueviolet">{{user}}</h1>
+{% endif %} -->
+
+
+<!-- for loop -->
+<!-- {% for ele in users %}
+<h1>{{ele}}</h1>
+{% endfor %} -->
+
+<!-- {% for ele in users %}
+<h1>{{ele.user}}</h1>
+{% endfor %} -->

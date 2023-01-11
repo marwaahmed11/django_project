@@ -1,0 +1,12 @@
+{% include 'base.html' %}
+
+<h1><center>Update project {{project.name}}</center></h1>
+<form action="" method="POST" enctype="multipart/form-data"> 
+    {% csrf_token %} {{form.as_p}} <!--  will render them wrapped in <p> tags -->
+    <!-- <input type="submit" value="Save" /> -->
+    <button type="submit">Update</button>
+</form>
+
+
+
+

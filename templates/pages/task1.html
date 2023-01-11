@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<!-- <style>
+    table,
+    tr,
+    td,
+    th {
+    border: 1px solid rgb(0, 0, 0);
+  
+    }
+</style> -->
+
+<table style="width:100%">
+    <tr>
+      <th>Name</th>
+      <th>Age</th>
+      <th>Salary</th>
+    </tr>
+   
+    {% for ele in users %}
+    <tr>
+      <td>{{ele.user}}</td>
+      <td>{{ele.age}}</td>
+      <td>{{ele.salary}}</td>
+    </tr>
+    {% endfor %} 
+  </table>
+
+{% endblock %}

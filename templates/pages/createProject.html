@@ -1,0 +1,24 @@
+{% include 'base.html' %}
+
+<style>
+    input{
+        width: 100%;
+        padding: 12px 20px;
+        margin: 8px 0;
+        display: inline-block;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+       
+    }
+ 
+</style>
+<head><center>Create project</center></head>
+<form action="" method="POST" enctype="multipart/form-data"> 
+    {% csrf_token %} {{form.as_p}}
+    <!-- <input type="submit" value="Save" /> -->
+    <button type="submit">Save</button>
+</form>
+
+
+
