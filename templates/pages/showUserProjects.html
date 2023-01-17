@@ -1,6 +1,16 @@
-{% include 'base.html' %}
+{% extends 'base.html' %}
 {% block content %}
-
+<!-- 
+<style>
+    table,
+    tr,
+    td,
+    th {
+    border: 1px solid green;
+    }
+</style> -->
+<!-- {% load static %} -->
+<!-- <img src="{% static 'images/images.jpeg' %}" alt="" /> -->
 <h1 style="color : rgb(255, 0, 191)">All Projects</h1> 
 <table>
     <tr>
@@ -28,12 +38,16 @@
       </td>
       <td style="padding: 10px">
         <a href="{% url 'showProject' ele.id %}" class="btn btn-info"> Show </a>
+        <a href="{% url 'deleteProject' ele.id %}" class="btn btn-danger"> Delete </a>
+        <a href="{% url 'updateProject' ele.id %}" class="btn btn-danger"> Update </a>
       </td>
     </tr>
     {% endfor %} 
   </table>
 <br>
   <a href ="{% url 'createProject' %}">Create Project</a>
+  <!-- <h1>{{car}}</h1> # bta3t get--> 
+
   <a href="{% url 'Logout'  %}" class="btn btn-info"> Logout</a>
 
 

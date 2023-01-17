@@ -1,30 +1,12 @@
 from django.shortcuts import render,redirect
 from django.http import HttpResponse
-from .models import Project,created_project
+from .models import Project
 from django.contrib.auth import login, authenticate, logout #add this
 from django.contrib import messages
 from django.contrib.auth.forms import AuthenticationForm #add this
 from django.contrib.auth.decorators import login_required
-from .forms import ProjectForm, CreatedProjectForm ,CreateUserForm
+from .forms import ProjectForm,CreateUserForm,FundedForm
 from django.contrib.auth.models import User
-
-# Create your views here.
-def pagesIndex(request):
-    return HttpResponse ("Hello from pages index")
-
-def pagesAbout(request):
-    return HttpResponse ("Hello from pages about")
-
-def renderHtml(request):
-    # dic ={"user":"marwa","name":"ahmed @@@@ ali","salary":100000}
-    newdic =[{"user":"ahmed","salary":100000},{"user":"omar","salary":200000}]
-    dic = {"users" : newdic}
-    return render(request,'pages/index.html',dic)
-
-def renderHtml2(request):
-    dic = {"user" :"hello"}
-    return render(request,'pages/about.html',dic)
-
 
 def showAllProjects(request):
     return render(request,'pages/showAllProjects.html',{"projects":Project.objects.all().order_by('id')}) #=> return all elements
@@ -42,22 +24,33 @@ def showAllProjects(request):
 def createProject(request):
     project = ProjectForm(request.POST, request.FILES)
     if project.is_valid():
-        project.save()
-        user_id= request.user.id
-        obj= Project.objects.latest('id')
-        project_id = obj.id # get row
-        result =  created_project(user_id=user_id,project_id=project_id)
-        result.save()
-    
+        instance = project.save(commit=False) 
+        instance.user = request.user
+        instance.save()
+        project.save() 
     else :
         print("not valid")
     return render(request,'pages/createProject.html',{"form":ProjectForm})
 
+def fundProject (request,id):
+    project= Project.objects.get(pk = id)
+    val=FundedForm(request.POST)
+    if val.is_valid():
+       instance = val.save(commit=False) #msh bt7otha f table
+       project.current_situation+=int(instance.value)  
+       project.save()
+       return redirect('showAllProjects')
+    project = Project.objects.get(pk = id)
+    return render(request,'pages/showFund.html',{"form" : val})
 
 def showProjectWithid (request,id):
     project= Project.objects.get(pk = id)
     return render(request,'pages/projectDetails.html',{"project" : project})
-    # return HttpResponse(project)
+  
+
+def showUserProjects (request):
+    project= Project.objects.filter(user=request.user.id).values()
+    return render(request,'pages/showUserProjects.html',{"projects" : project})
 
 @login_required(login_url='login')
 def deleteProjectWithid  (request,id):
@@ -65,7 +58,6 @@ def deleteProjectWithid  (request,id):
     project.delete()
     projects = Project.objects.all().order_by('id')
     return render(request,'pages/showAllProjects.html',{"projects" : projects})
-    # return HttpResponse(project)
 
 @login_required(login_url='login')
 def  updateProjectWithid (request,id):
@@ -78,21 +70,6 @@ def  updateProjectWithid (request,id):
         print("not valid")
     return render(request,'pages/updateProject.html',{"project" : project_id,"form" : form})
 
-@login_required(login_url='login')
-def donate(request):
-    project = ProjectForm(request.POST, request.FILES)
-    if project.is_valid():
-        project.save()
-        user_id= request.user.id
-        obj= Project.objects.latest('id')
-        project_id = obj.id # get row
-        result =  created_project(user_id=user_id,project_id=project_id)
-        result.save()
-    
-    else :
-        print("not valid")
-    return render(request,'pages/createProject.html',{"form":ProjectForm})
-
 
 
 def LogUserIn(request):
@@ -104,18 +81,14 @@ def LogUserIn(request):
             login(request, user)
             messages.info(request, f"You are now logged in as {username}.")
             #to be edited
-            return redirect('showAllProjects')
+            # return redirect('showAllProjects')
+            return redirect('showUserProjects')
         else:
             messages.error(request,"Invalid  password.")
     else:
         messages.error(request,"Invalid username or password.")
     return render(request,'pages/Login.html')
 
-# def CreateUser(request):
-#     SignedUser=user_registerForms(request.POST,request.FILES)
-#     if SignedUser.is_valid():
-#          SignedUser.save()
-#     return render(request,'User/Signup.html',{"Form":SignedUser})
 
 def LogUserOut(request):
     logout(request)

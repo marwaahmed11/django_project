@@ -1,23 +1,4 @@
-{% extends 'base.html' %} {% block content %}
-<!-- <h1>Project {{project.id}} Details</h1> -->
-<!-- <div class="card" style="width: 18rem">
-    {% if project.image %} <img src="{{project.image.url}}"  class="card-img-top" alt="image" width="200px"/> {% endif %}
-    <div class="card-body">
-        <h5 class="card-title">Name: {{project.name}}</h5>
-        <p class="card-text">Description:  {{project.Description}}</p>
-        <p class="card-text">Current Money:  {{project.current_situation}}</p>
-        <p class="card-text">Start Date:  {{project.start_date}}</p>
-        <p class="card-text">End Date:  {{project.end_date}}</p>
-        <p class="card-text">Category:  {{project.category}}</p>
-        <a href ="{% url 'showAllProjects' %}" class="btn btn-primary">Show All Projects</a>
-    </div>
-
-</div>
- -->
-
-
-
-
+{% include 'base.html' %} {% block content %}
 
  <!DOCTYPE html>
  <html lang="en">
@@ -30,7 +11,7 @@
    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
  </head>
  <style type="text/css">
-		.outerdiv
+	.outerdiv
 	{
 		margin: auto;
 		/* border: 3px solid black; */
@@ -136,12 +117,16 @@
 	 <p class="p3"> {{project.end_date}} </p>	
 	 <h2 class="h3"> Description</h2>
 	 <p class="p3">  {{project.Description}}  </p>	
+	
+     <form method="post">
+		{% csrf_token %}
+		<a href="{% url 'showFund' project.id %}" class="btn btn-info"> Fund </a>
+	 </form>
+	
+	
 	 </div>
 	</div>
 
-
-
- 
  </body>
  </html>
 
