@@ -10,16 +10,7 @@ from django.contrib.auth.models import User
 
 def showAllProjects(request):
     return render(request,'pages/showAllProjects.html',{"projects":Project.objects.all().order_by('id')}) #=> return all elements
-    #  return render(request,'pages/cars.html', {"car":Car.objects.get(name ="bmw")})  #=> get return only one element
-    # return render(request,'pages/cars.html', {"cars":Car.objects.filter(name = "car2")})  #filterlazm andeha bloop 
-    # cars = Car.objects.all().filter(price__exact='99')
-    #  cars = Car.objects.all().filter(price__contains='99')
-    #  cars = Car.objects.all().order_by('model').exclude(name="lancer")
-    #  dic = {"cars":cars}
-    #  return render(request,'pages/cars.html', dic)
- 
-
-
+   
 @login_required(login_url='login')
 def createProject(request):
     project = ProjectForm(request.POST, request.FILES)
@@ -27,17 +18,19 @@ def createProject(request):
         instance = project.save(commit=False) 
         instance.user = request.user
         instance.save()
-        project.save() 
+        project.save()
+        return redirect("showUserProjects") 
     else :
         print("not valid")
     return render(request,'pages/createProject.html',{"form":ProjectForm})
 
+@login_required(login_url='login')
 def fundProject (request,id):
     project= Project.objects.get(pk = id)
     val=FundedForm(request.POST)
     if val.is_valid():
-       instance = val.save(commit=False) #msh bt7otha f table
-       project.current_situation+=int(instance.value)  
+       instance = val.save(commit=False)
+       project.current_situation=project.current_situation+int(instance.value)  
        project.save()
        return redirect('showAllProjects')
     project = Project.objects.get(pk = id)
@@ -49,26 +42,28 @@ def showProjectWithid (request,id):
   
 
 def showUserProjects (request):
-    project= Project.objects.filter(user=request.user.id).values()
+    project= Project.objects.filter(user=request.user.id)
     return render(request,'pages/showUserProjects.html',{"projects" : project})
 
 @login_required(login_url='login')
 def deleteProjectWithid  (request,id):
     project= Project.objects.get(pk = id)
+    #instance=request.user.id
     project.delete()
     projects = Project.objects.all().order_by('id')
     return render(request,'pages/showAllProjects.html',{"projects" : projects})
 
+
 @login_required(login_url='login')
 def  updateProjectWithid (request,id):
-    project_id= Project.objects.get(pk = id)
-    form = ProjectForm(request.POST or None,instance=project_id)
+    project_record= Project.objects.get(pk = id)
+    form = ProjectForm(request.POST or None,instance=project_record)
     if form.is_valid():
         form.save()
-        return redirect('showAllProjects')
+        return redirect("showUserProjects") 
     else :
         print("not valid")
-    return render(request,'pages/updateProject.html',{"project" : project_id,"form" : form})
+    return render(request,'pages/updateProject.html',{"project" : project_record,"form" : form})
 
 
 
@@ -100,7 +95,7 @@ def CreateUser(request):
     if SignedUser.is_valid():
          SignedUser.save()
          userName=SignedUser.cleaned_data.get('username')
-         messages.success(request,"account has been created for"+userName)
+         messages.success(request,"account has been created for "+userName)
          return redirect('LoginForm')
     SignedUser=CreateUserForm()
     return render(request,'pages/Signup.html',{"Form":SignedUser})

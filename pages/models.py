@@ -15,7 +15,7 @@ class Project(models.Model):
     user = models.ForeignKey(User, default=None,null=True, on_delete=models.CASCADE)
 
     def __str__(self):  #=> must return a string 
-       return self.name  #=> 3shan t5li car tzhr b2smha msh id
+       return self.name  #=> 3shan t5li project tzhr b2smha msh id
     #    return str(self.price)
     class Meta:
         ordering = ['name'] #=> order ascending 
